@@ -8,19 +8,15 @@ struct ContentView: View {
                 .font(.largeTitle)
                 .bold()
             CommunityView(community: community)
-            GeometryReader { proxy in
-                VStack(spacing: 8) {
-                    Button(action: community.moveOntoNextDay) {
-                        Label("Next Day", systemImage: "calendar.badge.plus")
-                            .frame(width: proxy.size.width,
-                                   height: (proxy.size.height - 8) / 2,
-                                   alignment: .center)
-                            .background(.blue.opacity(0.15))
-                            .cornerRadius(6)
-                    }
-                    BottomSheetPresenter("Configure", detents: [.medium(), .large()]) {
-                        ConfigureView()
-                    }
+            VStack(spacing: 8) {
+                Button(action: community.moveOntoNextDay) {
+                    Label("Next Day", systemImage: "calendar.badge.plus")
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                }
+                .buttonStyle(.borderedProminent)
+                .buttonBorderShape(.roundedRectangle)
+                BottomSheetPresenter("Configure", detents: [.medium(), .large()]) {
+                    ConfigureView()
                 }
             }
         }

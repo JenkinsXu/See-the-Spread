@@ -22,7 +22,7 @@ struct BottomSheetPresenter<Content>: UIViewRepresentable where Content: View{
     func makeUIView(context: UIViewRepresentableContext<BottomSheetPresenter>) -> UIButton {
         let button = UIButton(type: .system)
         var buttonConfiguration = UIButton.Configuration.bordered()
-        buttonConfiguration.cornerStyle = .small
+        buttonConfiguration.cornerStyle = .medium
         buttonConfiguration.image = UIImage(systemName: "gear",
                                             withConfiguration: UIImage.SymbolConfiguration(scale: .medium))
         buttonConfiguration.imagePadding = 6.0
@@ -79,7 +79,6 @@ class BottomSheetWrapperController: UIViewController {
         if let sheetController = self.presentationController as? UISheetPresentationController {
             sheetController.detents = detents
             sheetController.prefersGrabberVisible = true
-            sheetController.largestUndimmedDetentIdentifier = .medium
         }
     }
 }
