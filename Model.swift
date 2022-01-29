@@ -7,7 +7,7 @@
 
 import Foundation
 
-class Individual {
+class Individual: Identifiable {
     enum HealthCondition {
         case healthy
         case infectedWithSymptoms
@@ -23,6 +23,7 @@ class Individual {
     var isolationStatus: IsolationStatus = .nonisolated
     var spreadCount = 0
     private var possibilityOfGettingInfected = Double.random(in: 0.5...0.8)
+    let id = UUID()
     
     func canInfectOthers(communityR0: Double) -> Bool {
         (isolationStatus != .isolated) && (Double(spreadCount) + 1 <= communityR0)
@@ -81,9 +82,11 @@ class Community: ObservableObject {
     
     init(row: Int, column: Int, r0: Double = 1.0) {
         self.communitySize = CommunitySize(row: row, column: column)
-        self.individuals = Array(repeating: Array(repeating: Individual(),
-                                                  count: column),
-                                 count: row)
+        self.individuals = (0..<row).map { _ in
+            (0..<column).map { _ in
+                Individual()
+            }
+        }
         self.r0 = r0
     }
     
