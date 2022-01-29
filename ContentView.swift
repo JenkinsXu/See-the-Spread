@@ -24,19 +24,3 @@ struct ContentView: View {
         .padding()
     }
 }
-
-struct CommunityView: View {
-    @ObservedObject var community: Community
-    var body: some View {
-        VStack {
-            ForEach(community.individuals.indices, id: \.self) { rowIndex in
-                let row = community.individuals[rowIndex]
-                HStack {
-                    ForEach(row) { individual in
-                        IndividualView(individual: individual)
-                    }
-                }
-            }
-        }
-    }
-}

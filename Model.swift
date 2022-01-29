@@ -10,6 +10,7 @@ import Foundation
 class Individual: Identifiable, ObservableObject {
     enum HealthCondition {
         case healthy
+        case vaccinated
         case infectedWithSymptoms
         case infectedWithNoSymptoms
     }
@@ -22,7 +23,7 @@ class Individual: Identifiable, ObservableObject {
     @Published var healthCondition: HealthCondition = .healthy
     @Published var isolationStatus: IsolationStatus = .nonisolated
     var spreadCount = 0
-    private var possibilityOfGettingInfected = Double.random(in: 0.5...0.8)
+    var possibilityOfGettingInfected = Double.random(in: 0.5...0.8)
     let id = UUID()
     
     func canInfectOthers(communityR0: Double) -> Bool {
@@ -41,12 +42,13 @@ class Individual: Identifiable, ObservableObject {
     func cured() {
         healthCondition = .healthy
         isolationStatus = .nonisolated
-        increaseImmunibility(by: 0.3)
+        increaseImmunibility(by: 0.2)
     }
     
     func vaccinated() {
+        healthCondition = .vaccinated
         isolationStatus = .nonisolated
-        increaseImmunibility(by: 0.7)
+        increaseImmunibility(by: 0.4)
     }
     
     private func increaseImmunibility(by amount: Double) {
