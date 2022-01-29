@@ -17,11 +17,18 @@ struct ContentView: View {
                     .buttonStyle(.borderedProminent)
                     .buttonBorderShape(.roundedRectangle)
                     Button(action: community.toggleAutoAdvance) {
-                        Label("Auto Advance", systemImage: "forward")
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        if community.isAutoAdvancing {
+                            Label("Pause", systemImage: "pause.fill")
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                .foregroundColor(.primary)
+                        } else {
+                            Label("Auto Advance", systemImage: "forward")
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        }
                     }
                     .buttonStyle(.borderedProminent)
                     .buttonBorderShape(.roundedRectangle)
+                    .tint(community.isAutoAdvancing ? Color(uiColor: .tertiarySystemFill) : .accentColor)
                 }
                 BottomSheetPresenter("Configure", detents: [.medium(), .large()]) {
                     ConfigureView()
