@@ -26,7 +26,9 @@ class Individual: Identifiable, ObservableObject {
     let id = UUID()
     
     func canInfectOthers(communityR0: Double) -> Bool {
-        (isolationStatus != .isolated) && (Double(spreadCount) + 1 <= communityR0)
+        (isolationStatus != .isolated) &&
+        (Double(spreadCount) + 1 <= communityR0) &&
+        (healthCondition == .infectedWithNoSymptoms || healthCondition == .infectedWithSymptoms)
     }
     
     func infected(showingSymptoms: Bool) {
@@ -58,6 +60,7 @@ class Individual: Identifiable, ObservableObject {
     func makeContact() -> Bool {
         guard
             isolationStatus == .nonisolated,
+            (healthCondition != .infectedWithSymptoms) && (healthCondition != .infectedWithNoSymptoms),
             Double.random(in: 0.0...1.0) < possibilityOfGettingInfected
         else {
             return false
