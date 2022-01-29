@@ -11,7 +11,7 @@ struct ContentView: View {
             VStack(spacing: 8) {
                 HStack(spacing: 8) {
                     Button(action: community.moveOntoNextDay) {
-                        Label("Next Day", systemImage: "calendar.badge.plus")
+                        Label("Next", systemImage: "calendar.badge.plus")
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
                     }
                     .buttonStyle(.borderedProminent)
@@ -22,13 +22,19 @@ struct ContentView: View {
                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                                 .foregroundColor(.primary)
                         } else {
-                            Label("Auto Advance", systemImage: "forward")
+                            Label("Auto", systemImage: "play.fill")
                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                         }
                     }
                     .buttonStyle(.borderedProminent)
                     .buttonBorderShape(.roundedRectangle)
                     .tint(community.isAutoAdvancing ? Color(uiColor: .tertiarySystemFill) : .accentColor)
+                    Button(action: community.reset) {
+                        Label("Reset", systemImage: "backward.end.fill")
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .buttonBorderShape(.roundedRectangle)
                 }
                 BottomSheetPresenter("Configure", detents: [.medium(), .large()]) {
                     ConfigureView()

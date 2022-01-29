@@ -168,4 +168,17 @@ class Community: ObservableObject {
         ]
         return indices.compactMap { individual(at: $0) }
     }
+    
+    func reset() {
+        self.daysIntoPandemic = 0
+        self.individuals = (0..<communitySize.row).map { _ in
+            (0..<communitySize.column).map { _ in
+                Individual()
+            }
+        }
+        self.individuals
+            .randomElement()?
+            .randomElement()?
+            .infected(showingSymptoms: false)
+    }
 }
