@@ -100,6 +100,7 @@ class Community: ObservableObject {
     @Published var isAutoAdvancing = false
     let communitySize: CommunitySize
     var r0: Double
+    private var isUsingMostlyVaccinatedPreset = false
     
     init(row: Int, column: Int, r0: Double = 1.0) {
         self.communitySize = CommunitySize(row: row, column: column)
@@ -109,7 +110,27 @@ class Community: ObservableObject {
             }
         }
         self.r0 = r0
-        self.individuals
+        self.firstPatientOccurs()
+    }
+    
+    static func mostlyVaccinated(row: Int, column: Int, r0: Double = 1.0) -> Community {
+        let community = Community(row: row, column: column, r0: r0)
+        community.vaccinateMostPeople()
+        community.firstPatientOccurs()
+        community.isUsingMostlyVaccinatedPreset = true
+        return community
+    }
+    
+    private func vaccinateMostPeople() {
+        individuals.flatMap { $0 }.forEach { individual in
+            if Double.random(in: 0.0...1.0) < 0.8 {
+                individual.vaccinated()
+            }
+        }
+    }
+    
+    private func firstPatientOccurs() {
+        individuals
             .randomElement()?
             .randomElement()?
             .infected(showingSymptoms: false)
@@ -188,15 +209,15 @@ class Community: ObservableObject {
     }
     
     func reset() {
-        self.daysIntoPandemic = 0
-        self.individuals = (0..<communitySize.row).map { _ in
+        daysIntoPandemic = 0
+        individuals = (0..<communitySize.row).map { _ in
             (0..<communitySize.column).map { _ in
                 Individual()
             }
         }
-        self.individuals
-            .randomElement()?
-            .randomElement()?
-            .infected(showingSymptoms: false)
+        if isUsingMostlyVaccinatedPreset {
+            vaccinateMostPeople()
+        }
+        firstPatientOccurs()
     }
 }

@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject var community = Community(row: 12, column: 8, r0: 2.0)
+    @StateObject var community = Community.mostlyVaccinated(row: 12, column: 8, r0: 2.0)
     var body: some View {
         VStack(spacing: 14) {
             Text("Day \(community.daysIntoPandemic)")
@@ -20,7 +20,7 @@ struct ContentView: View {
                         if community.isAutoAdvancing {
                             Label("Pause", systemImage: "pause.fill")
                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                .foregroundColor(.primary)
+                                .foregroundColor(.accentColor)
                         } else {
                             Label("Auto", systemImage: "play.fill")
                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
