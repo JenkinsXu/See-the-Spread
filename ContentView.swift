@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject var community = Community(row: 7, column: 5, r0: 2.0)
+    @StateObject var community = Community(row: 12, column: 8, r0: 2.0)
     var body: some View {
         VStack(spacing: 14) {
             Text("Day \(community.daysIntoPandemic)")

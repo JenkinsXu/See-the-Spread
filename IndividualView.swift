@@ -49,6 +49,8 @@ struct IndividualView: View {
             return Color("NoSymptomColor")
         case .infectedWithSymptoms:
             return Color("WithSymptomsColor")
+        case .removed:
+            return .secondary
         }
     }
 }

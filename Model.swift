@@ -13,6 +13,7 @@ class Individual: Identifiable, ObservableObject {
         case vaccinated
         case infectedWithSymptoms
         case infectedWithNoSymptoms
+        case removed
     }
     
     enum IsolationStatus {
@@ -24,7 +25,11 @@ class Individual: Identifiable, ObservableObject {
     @Published var isolationStatus: IsolationStatus = .nonisolated
     var spreadCount = 0
     var possibilityOfGettingInfected = Double.random(in: 0.5...0.8)
+    var numberOfDaysAfterInfected = 0
     let id = UUID()
+    var isInfected: Bool {
+        healthCondition == .infectedWithSymptoms || healthCondition == .infectedWithNoSymptoms
+    }
     
     func canInfectOthers(communityR0: Double) -> Bool {
         (isolationStatus != .isolated) &&
@@ -38,11 +43,14 @@ class Individual: Identifiable, ObservableObject {
             .infectedWithNoSymptoms
     }
     
-    // TODO: cure/remove an individual after a certain time
-    func cured() {
-        healthCondition = .healthy
-        isolationStatus = .nonisolated
-        increaseImmunibility(by: 0.2)
+    func recoverOrRemoved() {
+        if numberOfDaysAfterInfected > 30 {
+            healthCondition = .removed
+        } else if Double.random(in: 0.0...1.0) < 0.05 {
+            healthCondition = .healthy
+            isolationStatus = .nonisolated
+            increaseImmunibility(by: 0.2)
+        }
     }
     
     func vaccinated() {
@@ -127,7 +135,7 @@ class Community: ObservableObject {
                 let infectedColumnsAtRow = row
                     .enumerated()
                     .compactMap { columnIndex, individual in
-                        individual.canInfectOthers(communityR0: r0) ? columnIndex : nil
+                        individual.isInfected ? columnIndex : nil
                     }
                 return infectedColumnsAtRow.map { CommunityIndex(row: rowIndex, column: $0) }
             }
@@ -138,6 +146,9 @@ class Community: ObservableObject {
         infecterAndContactedIndividuals.forEach {
             guard let infecter = $0.infecter else { return }
             let contactedIndividuals = $0.contactedIndividuals.shuffled()
+            
+            infecter.numberOfDaysAfterInfected += 1
+            infecter.recoverOrRemoved()
             
             var contactedIndividualIterator = contactedIndividuals.makeIterator()
             while infecter.canInfectOthers(communityR0: r0),
