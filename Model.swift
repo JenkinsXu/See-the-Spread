@@ -25,7 +25,7 @@ class Individual {
     private var possibilityOfGettingInfected = Double.random(in: 0.5...0.8)
     
     func canInfectOthers(communityR0: Double) -> Bool {
-        (isolationStatus != .isolated) && (Double(spreadCount) <= communityR0)
+        (isolationStatus != .isolated) && (Double(spreadCount) + 1 <= communityR0)
     }
     
     private func infected(showingSymptoms: Bool) {
@@ -54,15 +54,16 @@ class Individual {
         possibilityOfGettingInfected -= amount
     }
     
-    func makeContact() {
+    func makeContact() -> Bool {
         guard
             isolationStatus == .nonisolated,
             Double.random(in: 0.0...1.0) < possibilityOfGettingInfected
         else {
-            return
+            return false
         }
         
         infected(showingSymptoms: Bool.random())
+        return true
     }
 }
 
@@ -102,8 +103,21 @@ class Community: ObservableObject {
                     }
                 return infectedColumnsAtRow.map { CommunityIndex(row: rowIndex, column: $0) }
             }
-        let contactedPeople = infectedIndices.flatMap { individualsAround(index: $0) }
-        contactedPeople.forEach { $0.makeContact() }
+        let infecterAndContactedIndividuals = infectedIndices.map {(
+            infecter: individual(at: $0),
+            contactedIndividuals: individualsAround(index: $0)
+        )}
+        infecterAndContactedIndividuals.forEach {
+            guard let infecter = $0.infecter else { return }
+            let contactedIndividuals = $0.contactedIndividuals.shuffled()
+            
+            var contactedIndividualIterator = contactedIndividuals.makeIterator()
+            while infecter.canInfectOthers(communityR0: r0),
+                  let contactedIndividual = contactedIndividualIterator.next() {
+                let infected = contactedIndividual.makeContact()
+                infecter.spreadCount += infected ? 1 : 0
+            }
+        }
     }
     
     private func individual(at index: CommunityIndex) -> Individual? {
