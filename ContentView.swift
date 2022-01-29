@@ -3,13 +3,26 @@ import SwiftUI
 struct ContentView: View {
     @StateObject var community = Community(row: 7, column: 5, r0: 2.0)
     var body: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: 24) {
             Text("Day \(community.daysIntoPandemic)")
                 .font(.largeTitle)
                 .bold()
             CommunityView(community: community)
-            Button("Next Day", action: community.moveOntoNextDay)
-                .buttonStyle(.bordered)
+            GeometryReader { proxy in
+                VStack(spacing: 8) {
+                    Button(action: community.moveOntoNextDay) {
+                        Label("Next Day", systemImage: "calendar.badge.plus")
+                            .frame(width: proxy.size.width,
+                                   height: (proxy.size.height - 8) / 2,
+                                   alignment: .center)
+                            .background(.blue.opacity(0.15))
+                            .cornerRadius(6)
+                    }
+                    BottomSheetPresenter("Configure", detents: [.medium(), .large()]) {
+                        ConfigureView()
+                    }
+                }
+            }
         }
         .padding()
     }
