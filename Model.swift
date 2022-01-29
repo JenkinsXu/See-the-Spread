@@ -126,7 +126,9 @@ class Community: ObservableObject {
     private func individual(at index: CommunityIndex) -> Individual? {
         guard
             (index.row    < communitySize.row) &&
-            (index.column < communitySize.column)
+            (index.column < communitySize.column) &&
+            (index.row    >= 0) &&
+            (index.column >= 0)
         else {
             return nil
         }
