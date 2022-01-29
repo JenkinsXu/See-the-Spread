@@ -41,8 +41,8 @@ struct IndividualView: View {
     
     private func colorForCondition(_ condition: Individual.HealthCondition) -> Color {
         switch condition {
-        case .healthy:
-            return Color("HealthyColor")
+        case .normal:
+            return Color("NormalColor")
         case .vaccinated:
             return Color("VaccinatedColor")
         case .infectedWithNoSymptoms:
