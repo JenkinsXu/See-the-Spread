@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct IndividualView: View {
-    let individual: Individual
+    @ObservedObject var individual: Individual
     var body: some View {
         GeometryReader { proxy in
             Circle()
@@ -19,6 +19,7 @@ struct IndividualView: View {
                                 lineWidth: proxy.size.width / 4)
                 )
         }
+        .aspectRatio(1.0, contentMode: .fit)
     }
     
     private func colorForCondition(_ condition: Individual.HealthCondition) -> Color {

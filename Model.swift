@@ -7,7 +7,7 @@
 
 import Foundation
 
-class Individual: Identifiable {
+class Individual: Identifiable, ObservableObject {
     enum HealthCondition {
         case healthy
         case infectedWithSymptoms
@@ -19,8 +19,8 @@ class Individual: Identifiable {
         case nonisolated
     }
     
-    var healthCondition: HealthCondition = .healthy
-    var isolationStatus: IsolationStatus = .nonisolated
+    @Published var healthCondition: HealthCondition = .healthy
+    @Published var isolationStatus: IsolationStatus = .nonisolated
     var spreadCount = 0
     private var possibilityOfGettingInfected = Double.random(in: 0.5...0.8)
     let id = UUID()
@@ -76,9 +76,9 @@ class Community: ObservableObject {
     typealias CommunitySize = CommunityIndex
     
     @Published var individuals: [[Individual]]
+    @Published var daysIntoPandemic = 0
     let communitySize: CommunitySize
     var r0: Double
-    var daysIntoPandemic = 0
     
     init(row: Int, column: Int, r0: Double = 1.0) {
         self.communitySize = CommunitySize(row: row, column: column)
