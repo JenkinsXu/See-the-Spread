@@ -1,22 +1,15 @@
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject var community = Community(row: 3, column: 3)
+    @StateObject var community = Community(row: 7, column: 5, r0: 2.0)
     var body: some View {
-        VStack {
+        VStack(spacing: 16) {
             Text("Day \(community.daysIntoPandemic)")
                 .font(.largeTitle)
                 .bold()
             CommunityView(community: community)
-            Button("Next Day") {
-                community.moveOntoNextDay()
-                community.individuals.forEach { row in
-                    row.forEach { individual in
-                        print(individual.healthCondition, terminator: " ")
-                    }
-                    print("")
-                }
-            }
+            Button("Next Day", action: community.moveOntoNextDay)
+                .buttonStyle(.bordered)
         }
         .padding()
     }
