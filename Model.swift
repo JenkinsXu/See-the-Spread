@@ -29,7 +29,7 @@ class Individual: Identifiable {
         (isolationStatus != .isolated) && (Double(spreadCount) + 1 <= communityR0)
     }
     
-    private func infected(showingSymptoms: Bool) {
+    func infected(showingSymptoms: Bool) {
         healthCondition = showingSymptoms ?
             .infectedWithSymptoms :
             .infectedWithNoSymptoms
@@ -88,6 +88,10 @@ class Community: ObservableObject {
             }
         }
         self.r0 = r0
+        self.individuals
+            .randomElement()?
+            .randomElement()?
+            .infected(showingSymptoms: false)
     }
     
     func moveOntoNextDay() {
