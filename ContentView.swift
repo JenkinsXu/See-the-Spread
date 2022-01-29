@@ -34,7 +34,7 @@ struct CommunityView: View {
         let numberOfColumns = community.communitySize.column
         LazyVGrid(columns: Array(repeating: .init(.flexible(minimum: 1.0, maximum: 100.0)),
                                  count: numberOfColumns)) {
-            ForEach(community.individuals.flatMap { $0 }, id: \.id) { individual in
+            ForEach(community.individuals.flatMap { $0 }) { individual in
                 IndividualView(individual: individual)
             }
         }
