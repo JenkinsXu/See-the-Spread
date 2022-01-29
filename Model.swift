@@ -82,6 +82,7 @@ class Community: ObservableObject {
     
     @Published var individuals: [[Individual]]
     @Published var daysIntoPandemic = 0
+    @Published var isAutoAdvancing = false
     let communitySize: CommunitySize
     var r0: Double
     
@@ -99,9 +100,24 @@ class Community: ObservableObject {
             .infected(showingSymptoms: false)
     }
     
+    @Sendable
     func moveOntoNextDay() {
         daysIntoPandemic += 1
         spread()
+    }
+    
+    func toggleAutoAdvance() {
+        isAutoAdvancing.toggle()
+        autoAdvance()
+    }
+    
+    private func autoAdvance() {
+        Task {
+            guard isAutoAdvancing else { return }
+            await MainActor.run(body: moveOntoNextDay)
+            try? await Task.sleep(nanoseconds: 1_000_000_000)
+            autoAdvance()
+        }
     }
     
     private func spread() {
