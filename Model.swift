@@ -95,14 +95,25 @@ class Community: ObservableObject {
     }
     typealias CommunitySize = CommunityIndex
     
+    enum Preset: String, CaseIterable, Identifiable {
+        case mostlyVaccinated
+        case normal
+        
+        var id: String { self.rawValue }
+    }
+    var preset: Preset = .normal {
+        didSet {
+            reset()
+        }
+    }
+    
     @Published var individuals: [[Individual]]
     @Published var daysIntoPandemic = 0
     @Published var isAutoAdvancing = false
     let communitySize: CommunitySize
     var r0: Double
-    private var isUsingMostlyVaccinatedPreset = false
     
-    init(row: Int, column: Int, r0: Double = 1.0) {
+    init(row: Int, column: Int, r0: Double = 1.0, preset: Preset) {
         self.communitySize = CommunitySize(row: row, column: column)
         self.individuals = (0..<row).map { _ in
             (0..<column).map { _ in
@@ -110,15 +121,17 @@ class Community: ObservableObject {
             }
         }
         self.r0 = r0
-        self.firstPatientOccurs()
+        self.initializeStatus(forPreset: preset)
     }
     
-    static func mostlyVaccinated(row: Int, column: Int, r0: Double = 1.0) -> Community {
-        let community = Community(row: row, column: column, r0: r0)
-        community.vaccinateMostPeople()
-        community.firstPatientOccurs()
-        community.isUsingMostlyVaccinatedPreset = true
-        return community
+    private func initializeStatus(forPreset preset: Preset) {
+        switch preset {
+        case .mostlyVaccinated:
+            vaccinateMostPeople()
+        case .normal:
+            break
+        }
+        firstPatientOccurs()
     }
     
     private func vaccinateMostPeople() {
@@ -215,9 +228,6 @@ class Community: ObservableObject {
                 Individual()
             }
         }
-        if isUsingMostlyVaccinatedPreset {
-            vaccinateMostPeople()
-        }
-        firstPatientOccurs()
+        initializeStatus(forPreset: preset)
     }
 }

@@ -10,11 +10,13 @@ import SwiftUI
 /// The code in this `struct` is extracted from and modified based on Donny Wals' [Using UISheetPresentationController in SwiftUI](https://www.donnywals.com/using-uisheetpresentationcontroller-in-swiftui/). I did NOT implemented this by myself.
 struct BottomSheetPresenter<Content>: UIViewRepresentable where Content: View{
     let label: String
+    let imageSystemName: String
     let content: Content
     let detents: [UISheetPresentationController.Detent]
 
-    init(_ label: String, detents: [UISheetPresentationController.Detent], @ViewBuilder content: () -> Content) {
+    init(_ label: String, imageSystemName: String = "", detents: [UISheetPresentationController.Detent], @ViewBuilder content: () -> Content) {
         self.label = label
+        self.imageSystemName = imageSystemName
         self.content = content()
         self.detents = detents
     }
@@ -23,7 +25,7 @@ struct BottomSheetPresenter<Content>: UIViewRepresentable where Content: View{
         let button = UIButton(type: .system)
         var buttonConfiguration = UIButton.Configuration.bordered()
         buttonConfiguration.cornerStyle = .medium
-        buttonConfiguration.image = UIImage(systemName: "gear",
+        buttonConfiguration.image = UIImage(systemName: imageSystemName,
                                             withConfiguration: UIImage.SymbolConfiguration(scale: .medium))
         buttonConfiguration.imagePadding = 6.0
         button.configuration = buttonConfiguration

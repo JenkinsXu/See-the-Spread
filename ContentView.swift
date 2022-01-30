@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject var community = Community.mostlyVaccinated(row: 12, column: 8, r0: 2.0)
+    @StateObject var community = Community(row: 12, column: 8, r0: 2.0, preset: .mostlyVaccinated)
     var body: some View {
         VStack(spacing: 14) {
             Text("Day \(community.daysIntoPandemic)")
@@ -28,7 +28,7 @@ struct ContentView: View {
                     }
                     .buttonStyle(.borderedProminent)
                     .buttonBorderShape(.roundedRectangle)
-                    .tint(community.isAutoAdvancing ? Color(uiColor: .tertiarySystemFill) : .accentColor)
+                    .tint(community.isAutoAdvancing ? Color(uiColor: .secondarySystemFill) : .accentColor)
                     Button(action: community.reset) {
                         Label("Reset", systemImage: "backward.end.fill")
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -36,8 +36,13 @@ struct ContentView: View {
                     .buttonStyle(.borderedProminent)
                     .buttonBorderShape(.roundedRectangle)
                 }
-                BottomSheetPresenter("Configure", detents: [.medium(), .large()]) {
-                    ConfigureView()
+                HStack(spacing: 8) {
+                    BottomSheetPresenter("Configure", imageSystemName: "gear", detents: [.medium(), .large()]) {
+                        ConfigureView()
+                    }
+                    BottomSheetPresenter("Presets", imageSystemName: "circle.hexagongrid.fill", detents: [.medium(), .large()]) {
+                        PresetPicker()
+                    }
                 }
             }
             .frame(maxHeight: 120)
