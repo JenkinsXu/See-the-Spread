@@ -41,7 +41,7 @@ struct ContentView: View {
                         ConfigureView()
                     }
                     BottomSheetPresenter("Presets", imageSystemName: "circle.hexagongrid.fill", detents: [.medium(), .large()]) {
-                        PresetPicker()
+                        PresetPicker(preset: $community.preset)
                     }
                 }
             }
