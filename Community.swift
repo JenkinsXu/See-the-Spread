@@ -14,7 +14,7 @@ class Community: ObservableObject {
     }
     typealias CommunitySize = CommunityIndex
     
-    var preset: Preset = .notVaccinated {
+    var preset: Preset {
         didSet {
             reset()
         }
@@ -26,7 +26,7 @@ class Community: ObservableObject {
     let communitySize: CommunitySize
     var r0: Double
     
-    init(row: Int, column: Int, r0: Double = 1.0, preset: Preset) {
+    init(row: Int, column: Int, r0: Double = 1.0, preset: Preset = .mostlyVaccinated) {
         self.communitySize = CommunitySize(row: row, column: column)
         self.individuals = (0..<row).map { _ in
             (0..<column).map { _ in
@@ -34,6 +34,7 @@ class Community: ObservableObject {
             }
         }
         self.r0 = r0
+        self.preset = preset
         self.initializeStatus(forPreset: preset)
     }
     
@@ -154,6 +155,7 @@ class Community: ObservableObject {
                 Individual()
             }
         }
+        print(preset)
         initializeStatus(forPreset: preset)
     }
 }
