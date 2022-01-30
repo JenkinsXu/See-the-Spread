@@ -39,10 +39,15 @@ class Community: ObservableObject {
     
     private func initializeStatus(forPreset preset: Preset) {
         switch preset {
-        case .mostlyVaccinated:
-            vaccinateMostPeople()
         case .normal:
             break
+        case .mostlyVaccinated:
+            vaccinateMostPeople()
+        case .rarelyVaccinated:
+            vaccinateSomePeople()
+        case .rarelyFullyVaccinated:
+            vaccinateSomePeople()
+            vaccinateSomePeople()
         }
         firstPatientOccurs()
     }
@@ -50,6 +55,14 @@ class Community: ObservableObject {
     private func vaccinateMostPeople() {
         individuals.flatMap { $0 }.forEach { individual in
             if Double.random(in: 0.0...1.0) < 0.8 {
+                individual.vaccinated()
+            }
+        }
+    }
+    
+    private func vaccinateSomePeople() {
+        individuals.flatMap { $0 }.forEach { individual in
+            if Double.random(in: 0.0...1.0) < 0.3 {
                 individual.vaccinated()
             }
         }
