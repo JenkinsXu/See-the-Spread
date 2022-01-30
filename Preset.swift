@@ -8,7 +8,7 @@
 import Foundation
 
 enum Preset: String, CaseIterable, Identifiable {
-    case normal
+    case notVaccinated
     case mostlyVaccinated
     case rarelyVaccinated
     case rarelyFullyVaccinated
@@ -22,8 +22,8 @@ enum Preset: String, CaseIterable, Identifiable {
     
     var info: Info {
         switch self {
-        case .normal:
-            return Info(name: "None Vaccinated", description: "No one is vaccinated. Notice how fast the virus will be spreading.")
+        case .notVaccinated:
+            return Info(name: "Not Vaccinated", description: "No one is vaccinated. Notice how fast the virus will be spreading.")
         case .mostlyVaccinated:
             return Info(name: "Mostly Vaccinated",
                         description: "80% of the community will be vaccinated by one dose. See how much this would slow the spread down and reduce deaths.")

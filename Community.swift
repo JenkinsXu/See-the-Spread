@@ -14,7 +14,7 @@ class Community: ObservableObject {
     }
     typealias CommunitySize = CommunityIndex
     
-    var preset: Preset = .normal {
+    var preset: Preset = .notVaccinated {
         didSet {
             reset()
         }
@@ -39,7 +39,7 @@ class Community: ObservableObject {
     
     private func initializeStatus(forPreset preset: Preset) {
         switch preset {
-        case .normal:
+        case .notVaccinated:
             break
         case .mostlyVaccinated:
             vaccinateMostPeople()
