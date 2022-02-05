@@ -9,7 +9,7 @@ The percentage shown above each individual is the probability of infection, whic
 
 Several presets have been included in the project to allow the user to observe the different rates of virus transmission in different social settings, as well as mortality rates.
 
-## Back Story
+## Back Story & What's Not Included
 This project is a remake of my project for the WWDC Swift Student Challenge in 2020. Since the original project no longer works properly for various reasons, and because of the launch of the new Swift Playgrounds on the iPad, I decided to rewrite this project using the new `swiftpm` format.
 
 Currently, the core functionality of this project has been implemented, but the introduction to disease transmission concepts section is still under development (e.g., basic transmission constants). I am currently designing illustrations for showcasing these concepts and hope to make this project more complete soon.
